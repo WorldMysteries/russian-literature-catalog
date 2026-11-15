@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Untold Archive — Каталог русской литературы</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-paper: #F8F7F4;
+      --bg-surface: #FFFFFF;
+      --bg-muted: #EFECE6;
+      --text-ink: #141413;
+      --text-muted: #57534E;
+      --border-hairline: #E4E0D8;
+      --accent-lapis: #1B365D;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background-color: var(--bg-paper);
+      color: var(--text-ink);
+      font-family: "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .site-header {
+      border-bottom: 1px solid var(--border-hairline);
+      background: rgba(248, 247, 244, 0.94);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(8px);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 16px 0;
+    }
+
+    .brand {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--text-ink);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .header-stats {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .hero {
+      padding: 56px 0 40px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .hero-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 12px;
+    }
+
+    .hero-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(2.25rem, 4.5vw, 3.5rem);
+      font-weight: 600;
+      line-height: 1.08;
+      margin: 0 0 16px;
+      max-width: 18ch;
+    }
+
+    .hero-lead {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 66ch;
+      margin: 0 0 28px;
+    }
+
+    .toc-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 20px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .toc-nav a {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-ink);
+      text-decoration: none;
+      padding: 4px 0;
+      border-bottom: 1px solid transparent;
+      transition: color 0.15s ease, border-color 0.15s ease;
+    }
+
+    .toc-nav a:hover {
+      color: var(--accent-lapis);
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .catalog-section {
+      padding: 56px 0;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .section-header {
+      margin-bottom: 32px;
+      max-width: 72ch;
+    }
+
+    .section-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 6px;
+    }
+
+    .section-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(1.75rem, 3vw, 2.35rem);
+      font-weight: 600;
+      margin: 0 0 10px;
+      line-height: 1.15;
+    }
+
+    .section-desc {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .authors-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 24px;
+      align-items: start;
+    }
+
+    .author-card,
+    .author-details {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: 6px;
+      padding: 24px;
+    }
+
+    .author-details { padding: 0; }
+
+    .author-summary {
+      list-style: none;
+      cursor: pointer;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 20px 24px;
+      border-bottom: 1px solid transparent;
+    }
+
+    .author-details[open] .author-summary {
+      border-bottom-color: var(--border-hairline);
+    }
+
+    .author-summary::-webkit-details-marker { display: none; }
+
+    .author-heading strong {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      display: block;
+      line-height: 1.2;
+    }
+
+    .author-years, .tabular {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .author-body { padding: 18px 24px 24px; }
+
+    .author-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      padding-bottom: 14px;
+      margin-bottom: 14px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .author-name {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.45rem;
+      font-weight: 600;
+      margin: 0 0 4px;
+      line-height: 1.2;
+    }
+
+    .author-role {
+      margin: 0;
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+    }
+
+    .author-count {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .author-bio {
+      margin: 0 0 18px;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    .works-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .work-item {
+      padding: 12px 0;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .work-item:target {
+      background: rgba(27, 54, 93, 0.05);
+      padding-left: 10px;
+      padding-right: 10px;
+      margin-left: -10px;
+      margin-right: -10px;
+    }
+
+    .work-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 6px 12px;
+    }
+
+    .work-code {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    .work-link {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--accent-lapis);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(27, 54, 93, 0.28);
+      transition: border-color 0.15s ease;
+    }
+
+    .work-link:hover {
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .work-meta {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-left: auto;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .work-summary {
+      margin: 6px 0 0;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+    }
+
+    .site-footer {
+      padding: 36px 0 48px;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    @media (max-width: 640px) {
+      .authors-grid { grid-template-columns: 1fr; }
+      .work-meta { margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="https://untoldarchive.com/ru/">Untold Archive</a>
+      <div class="header-stats">6 разделов · 20 писателей · 50 произведений</div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <p class="hero-kicker">Литературный архив · Сводный указатель</p>
+      <h1 class="hero-title">Каталог русской классической литературы</h1>
+      <p class="hero-lead">
+        Систематизированное собрание по литературным эпохам и разделам: от Золотого века и философского романа XIX столетия до поэзии Серебряного века и прозы XX века.
+      </p>
+      <nav class="toc-nav" aria-label="Разделы каталога">
+        <a href="#golden-age-prose">Раздел I: Золотой век русской прозы и романа</a>
+        <a href="#great-philosophical-novel">Раздел II: Великий русский философский роман</a>
+        <a href="#russian-drama">Раздел III: Русская драматургия и театр</a>
+        <a href="#silver-age-poetry">Раздел IV: Поэзия Серебряного века</a>
+        <a href="#twentieth-century-prose">Раздел V: Русская проза XX века и эмиграция</a>
+        <a href="#satire-and-parables">Раздел VI: Сатира, сказ и малая проза</a>
+      </nav>
+    </section>
+
+    
+      <section class="catalog-section" id="golden-age-prose">
+        <div class="section-header">
+          <p class="section-kicker">Раздел I · 1820–1870-е годы</p>
+          <h2 class="section-title">Золотой век русской прозы и романа</h2>
+          <p class="section-desc">Становление классического русского романа, психологического реализма и повествовательного канона от пушкинской эпохи до великих повестей середины XIX столетия.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-pushkin">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Александр Сергеевич Пушкин</h3>
+                  <p class="author-role">Основоположник новой русской литературы · <span class="tabular">1799–1837</span></p>
+                </div>
+                <span class="author-count">4 произв.</span>
+              </header>
+              <p class="author-bio">Поэт, прозаик и драматург, сформировавший современный русский литературный язык и задавший образцы романа в стихах, исторической прозы и новеллы.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-evgeny-onegin">
+                  <div class="work-row">
+                    <span class="work-code">АРХ-01.01</span>
+                    <a class="work-link" href="./works/pushkin-evgeny-onegin.html">Евгений Онегин</a>
+                    <span class="work-meta">1833 · Роман в стихах</span>
+                  </div>
+                  <p class="work-summary">Энциклопедия русской жизни первой трети XIX века: история светского скептика Онегина, Татьяны Лариной и трагической дуэли с Владимиром Ленским.</p>
+                </li>
+                <li class="work-item" id="work-kapitanskaya-dochka">
+                  <div class="work-row">
+                    <span class="work-code">АРХ-01.02</span>
+                    <a class="work-link" href="./works/pushkin-kapitanskaya-dochka.html">Капитанская дочка</a>
+                    <span class="work-meta">1836 · Исторический роман</span>
+                  </div>
+                  <p class="work-summary">Мемуарная повесть о дворянской чести, милосердии и судьбе молодого офицера Петра Гринёва в вихре Пугачёвского восстания.</p>
+                </li>
+                <li class="work-item" id="work-pikovaya-dama">
+                  <div class="work-row">
+                    <span class="work-code">АРХ-01.03</span>
+                    <a class="work-link" href="./works/pushkin-pikovaya-dama.html">Пиковая дама</a>
+                    <span class="work-meta">1834 · Повесть</span>
+                  </div>
+                  <p class="work-summary">Мистическая петербургская новелла об одержимости тайной трёх карт, холодном расчёте и роковой расплате за сделку с судьбой.</p>
+                </li>
+                <li class="work-item" id="work-povesti-belkina">
+                  <div class="work-row">
+                    <span class="work-code">АРХ-01.04</span>
+                    <a class="work-link" href="./works/pushkin-povesti-belkina.html">Повести покойного Ивана Петровича Белкина</a>
+                    <span class="work-meta">1831 · Цикл повестей</span>
+                  </div>
+                  <p class="work-summary">Пять разножанровых историй («Выстрел», «Метель», «Гробовщик», «Станционный смотритель», «Барышня-крестьянка»), открывших русскую реалистическую прозу.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-gogol">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Николай Васильевич Гоголь</h3>
+                  <p class="author-role">Мастер гротеска и сатирического эпоса · <span class="tabular">1809–1852</span></p>
+                </div>
+                <span class="author-count">3 произв.</span>
+              </header>
+              <p class="author-bio">Прозаик и драматург, соединивший народную фантастику, петербургский абсурд и пронзительное сострадание к маленькому человеку.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-mertvye-dushi">
+                  <div class="work-row">
+                    <span class="work-code">АРХ-01.05</span>
+                    <a class="work-link" href="./works/gogol-mertvye-dushi.html">Мёртвые души</a>
+                    <span class="work-meta">1842 · Поэма в прозе</span>
+                  </div>
+                  <p class="work-summary">Грандиозная панорама уездной и помещичьей России, увиденная через авантюрное путешествие Павла Ивановича Чичикова.</p>
+                </li>
+                <li class="work-item" id="work-shinel">
+                  <div class="work-row">
+                    <span class="work-code">АРХ-01.06</span>
+                    <a class="work-link" href="./works/gogol-shinel.html">Шинель</a>
+                    <span class="work-meta">1842 · Повесть</span>
+                  </div>
+                  <p class="work-summary">Петербургская повесть о скромном титулярном советнике Акакии Акакиевиче Башмачкине, для которого новая шинель становится смыслом существования.</p>
+                </li>
+                <li class="work-item" id="work-vechera-na-hutore">
+                  <div class="work-row">
+                    <span class="work-code">АРХ-01.07</span>
+                    <a class="work-link" href="./works/gogol-vechera-na-hutore.html">Вечера на хуторе близ Диканьки</a>
+                    <span class="work-meta">1832 · Сборник повестей</span>
+                  </div>
+                  <p class="work-summary">Поэтические и искромётные повести, в которых малороссийский фольклор оживает в сказочных ярмарочных ночах и легендах.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-lermontov">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Михаил Юрьевич Лермонтов</h3>
+                  <p class="author-role">Поэт мятежного духа и психологической прозы · <span class="tabular">1814–1841</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Создатель первого русского социально-психологического романа в прозе и вершин романтической поэзии.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-geroy-nashego-vremeni">
+                  <div class="work-row">
+                    <span class="work-code">АРХ-01.08</span>
+                    <a class="work-link" href="./works/lermontov-geroy-nashego-vremeni.html">Герой нашего времени</a>
+                    <span class="work-meta">1840 · Психологический роман</span>
+                  </div>
+                  <p class="work-summary">Нехронологическая исповедь и портрет Григория Печорина — человека редкого ума и воли, разочарованного в своём поколении.</p>
+                </li>
+                <li class="work-item" id="work-mtsyri">
+                  <div class="work-row">
+                    <span class="work-code">АРХ-01.09</span>
+                    <a class="work-link" href="./works/lermontov-mtsyri.html">Мцыри</a>
+                    <span class="work-meta">1840 · Поэма</span>
+                  </div>
+                  <p class="work-summary">Лирический монолог юноши-горца, выросшего в монастырской неволе и вырвавшегося на три дня навстречу дикой природе и свободе.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-turgenev">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Иван Сергеевич Тургенев</h3>
+                  <p class="author-role">Тонкий живописец природы и идейных споров · <span class="tabular">1818–1883</span></p>
+                </div>
+                <span class="author-count">3 произв.</span>
+              </header>
+              <p class="author-bio">Писатель, открывший европейскому читателю русскую усадебную культуру, поэзию средней полосы и драму смены поколений.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-otcy-i-deti">
+                  <div class="work-row">
+                    <span class="work-code">АРХ-01.10</span>
+                    <a class="work-link" href="./works/turgenev-otcy-i-deti.html">Отцы и дети</a>
+                    <span class="work-meta">1862 · Роман</span>
+                  </div>
+                  <p class="work-summary">Столкновение либерального дворянства и нигилиста Евгения Базарова, ставшего одним из главных образов русской мысли.</p>
+                </li>
+                <li class="work-item" id="work-zapiski-ohotnika">
+                  <div class="work-row">
+                    <span class="work-code">АРХ-01.11</span>
+                    <a class="work-link" href="./works/turgenev-zapiski-ohotnika.html">Записки охотника</a>
+                    <span class="work-meta">1852 · Цикл рассказов</span>
+                  </div>
+                  <p class="work-summary">Очерки и рассказы о крестьянских характерах, народных певцах и живой поэзии русского леса и степи.</p>
+                </li>
+                <li class="work-item" id="work-dvoryanskoe-gnezdo">
+                  <div class="work-row">
+                    <span class="work-code">АРХ-01.12</span>
+                    <a class="work-link" href="./works/turgenev-dvoryanskoe-gnezdo.html">Дворянское гнездо</a>
+                    <span class="work-meta">1859 · Роман</span>
+                  </div>
+                  <p class="work-summary">Элегический роман о возвращении Фёдора Лаврецкого в родовое имение, о поздней любви, долге и смирении.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="great-philosophical-novel">
+        <div class="section-header">
+          <p class="section-kicker">Раздел II · 1855–1900 годы</p>
+          <h2 class="section-title">Великий русский философский роман</h2>
+          <p class="section-desc">Монументальные эпопеи и полифонические романы второй половины XIX века, определившие мировую литературу и нравственную философию.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-tolstoy">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Лев Николаевич Толстой</h3>
+                  <p class="author-role">Создатель романа-эпопеи и «диалектики души» · <span class="tabular">1828–1910</span></p>
+                </div>
+                <span class="author-count">4 произв.</span>
+              </header>
+              <p class="author-bio">Классик мировой литературы, соединивший исторический масштаб народной жизни с пристальным исследованием внутреннего движения человеческого сердца.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-voina-i-mir">
+                  <div class="work-row">
+                    <span class="work-code">АРХ-02.01</span>
+                    <a class="work-link" href="./works/tolstoy-voina-i-mir.html">Война и мир</a>
+                    <span class="work-meta">1869 · Роман-эпопея</span>
+                  </div>
+                  <p class="work-summary">Четырёхтомная эпопея о русском обществе эпохи наполеоновских войн (1805–1812): судьбы семей Болконских, Ростовых и Пьера Безухова на фоне истории.</p>
+                </li>
+                <li class="work-item" id="work-anna-karenina">
+                  <div class="work-row">
+                    <span class="work-code">АРХ-02.02</span>
+                    <a class="work-link" href="./works/tolstoy-anna-karenina.html">Анна Каренина</a>
+                    <span class="work-meta">1877 · Роман</span>
+                  </div>
+                  <p class="work-summary">Трагическая история любви Анны Карениной и Алексея Вронского, сопоставленная с поисками духовной опоры Константина Левина.</p>
+                </li>
+                <li class="work-item" id="work-smert-ivana-ilyicha">
+                  <div class="work-row">
+                    <span class="work-code">АРХ-02.03</span>
+                    <a class="work-link" href="./works/tolstoy-smert-ivana-ilyicha.html">Смерть Ивана Ильича</a>
+                    <span class="work-meta">1886 · Повесть</span>
+                  </div>
+                  <p class="work-summary">Философская повесть о судейском чиновнике, перед лицом болезни переосмысливающем пустоту прежней светской жизни.</p>
+                </li>
+                <li class="work-item" id="work-voskresenie">
+                  <div class="work-row">
+                    <span class="work-code">АРХ-02.04</span>
+                    <a class="work-link" href="./works/tolstoy-voskresenie.html">Воскресение</a>
+                    <span class="work-meta">1899 · Роман</span>
+                  </div>
+                  <p class="work-summary">Последний большой роман Толстого о нравственном пробуждении князя Нехлюдова, узнавшего на суде Катюшу Маслову.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-dostoevsky">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Фёдор Михайлович Достоевский</h3>
+                  <p class="author-role">Мастер полифонического романа идей · <span class="tabular">1821–1881</span></p>
+                </div>
+                <span class="author-count">4 произв.</span>
+              </header>
+              <p class="author-bio">Мыслитель и романист, исследовавший предельные состояния человеческой совести, свободы, веры и трагедии расколотого сознания.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-prestuplenie-i-nakazanie">
+                  <div class="work-row">
+                    <span class="work-code">АРХ-02.05</span>
+                    <a class="work-link" href="./works/dostoevsky-prestuplenie-i-nakazanie.html">Преступление и наказание</a>
+                    <span class="work-meta">1866 · Философский роман</span>
+                  </div>
+                  <p class="work-summary">Роман о петербургском студенте Родионе Раскольникове, проверившем теорию о «праве сильного» и прошедшем путь к покаянию через Соню Мармеладову.</p>
+                </li>
+                <li class="work-item" id="work-bratya-karamazovy">
+                  <div class="work-row">
+                    <span class="work-code">АРХ-02.06</span>
+                    <a class="work-link" href="./works/dostoevsky-bratya-karamazovy.html">Братья Карамазовы</a>
+                    <span class="work-meta">1880 · Роман</span>
+                  </div>
+                  <p class="work-summary">Итоговый роман-синтез о вере, сомнении и ответственности каждого за всех, разворачивающийся вокруг драмы семьи Карамазовых.</p>
+                </li>
+                <li class="work-item" id="work-idiot">
+                  <div class="work-row">
+                    <span class="work-code">АРХ-02.07</span>
+                    <a class="work-link" href="./works/dostoevsky-idiot.html">Идиот</a>
+                    <span class="work-meta">1869 · Роман</span>
+                  </div>
+                  <p class="work-summary">Попытка изобразить «положительно прекрасного человека» — князя Льва Мышкина — в мире страстей, денег и гордыни.</p>
+                </li>
+                <li class="work-item" id="work-besy">
+                  <div class="work-row">
+                    <span class="work-code">АРХ-02.08</span>
+                    <a class="work-link" href="./works/dostoevsky-besy.html">Бесы</a>
+                    <span class="work-meta">1872 · Роман-предупреждение</span>
+                  </div>
+                  <p class="work-summary">Пророческий политико-философский роман о радикальном кружке в губернском городе и духовном опустошении без нравственной основы.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-goncharov">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Иван Александрович Гончаров</h3>
+                  <p class="author-role">Бытописатель покоя, созерцания и русской усадьбы · <span class="tabular">1812–1891</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Романист, запечатлевший поэзию созерцательной души и конфликт патриархального уклада с деятельным прагматизмом.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-oblomov">
+                  <div class="work-row">
+                    <span class="work-code">АРХ-02.09</span>
+                    <a class="work-link" href="./works/goncharov-oblomov.html">Обломов</a>
+                    <span class="work-meta">1859 · Роман</span>
+                  </div>
+                  <p class="work-summary">История Ильи Ильича Обломова — чистосердечного мечтателя, чья внутренняя деликатность оборачивается бегством от суеты мира на диван в Гороховой улице.</p>
+                </li>
+                <li class="work-item" id="work-obyknovennaya-istoriya">
+                  <div class="work-row">
+                    <span class="work-code">АРХ-02.10</span>
+                    <a class="work-link" href="./works/goncharov-obyknovennaya-istoriya.html">Обыкновенная история</a>
+                    <span class="work-meta">1847 · Роман</span>
+                  </div>
+                  <p class="work-summary">Роман воспитания о молодом провинциале Александре Адуеве, приехавшем покорять Петербург с романтическими иллюзиями.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="russian-drama">
+        <div class="section-header">
+          <p class="section-kicker">Раздел III · 1824–1904 годы</p>
+          <h2 class="section-title">Русская драматургия и театр</h2>
+          <p class="section-desc">Ключевые пьесы национального репертуара: от блестящей стихотворной сатиры и купеческих драм Замоскворечья до чеховского «подводного течения».</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-griboedov">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Александр Сергеевич Грибоедов</h3>
+                  <p class="author-role">Драматург, поэт и дипломат · <span class="tabular">1795–1829</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Автор бессмертной комедии в стихах, разошедшейся на сотни крылатых выражений и определившей язык русской сцены.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-gore-ot-uma">
+                  <div class="work-row">
+                    <span class="work-code">АРХ-03.01</span>
+                    <a class="work-link" href="./works/griboedov-gore-ot-uma.html">Горе от ума</a>
+                    <span class="work-meta">1824 · Комедия в стихах</span>
+                  </div>
+                  <p class="work-summary">Возвращение Александра Чацкого в дом Фамусова и столкновение свободного ума с косностью московского светского общества.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-ostrovsky">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Александр Николаевич Островский</h3>
+                  <p class="author-role">Создатель русского национального театра · <span class="tabular">1823–1886</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Драматург, написавший почти пятьдесят пьес и подаривший русской сцене галерею живых купеческих, чиновничьих и актёрских характеров.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-groza">
+                  <div class="work-row">
+                    <span class="work-code">АРХ-03.02</span>
+                    <a class="work-link" href="./works/ostrovsky-groza.html">Гроза</a>
+                    <span class="work-meta">1859 · Драма</span>
+                  </div>
+                  <p class="work-summary">Трагедия Катерины Кабановой в волжском городе Калинове — поэтический порыв души против «тёмного царства» семейного деспотизма.</p>
+                </li>
+                <li class="work-item" id="work-bespridannica">
+                  <div class="work-row">
+                    <span class="work-code">АРХ-03.03</span>
+                    <a class="work-link" href="./works/ostrovsky-bespridannica.html">Бесприданница</a>
+                    <span class="work-meta">1878 · Драма</span>
+                  </div>
+                  <p class="work-summary">Драма о Ларисе Огудаловой, чья искренность и красота становятся ставкой в циничном торге волжских дельцов.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-chekhov">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Антон Павлович Чехов</h3>
+                  <p class="author-role">Реформатор мировой драмы и мастер короткого рассказа · <span class="tabular">1860–1904</span></p>
+                </div>
+                <span class="author-count">4 произв.</span>
+              </header>
+              <p class="author-bio">Писатель и драматург, научивший театр слышать молчание, полутона и тонкую музыку обыденной человеческой жизни.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-vishnevy-sad">
+                  <div class="work-row">
+                    <span class="work-code">АРХ-03.04</span>
+                    <a class="work-link" href="./works/chekhov-vishnevy-sad.html">Вишнёвый сад</a>
+                    <span class="work-meta">1904 · Комедия в 4 действиях</span>
+                  </div>
+                  <p class="work-summary">Прощание с уходящей дворянской Россией: продажа цветущего имения Раневской и неспособность героев услышать время.</p>
+                </li>
+                <li class="work-item" id="work-chayka">
+                  <div class="work-row">
+                    <span class="work-code">АРХ-03.05</span>
+                    <a class="work-link" href="./works/chekhov-chayka.html">Чайка</a>
+                    <span class="work-meta">1896 · Комедия</span>
+                  </div>
+                  <p class="work-summary">Пьеса о поиске новых форм в искусстве, безответной любви и хрупкости таланта на берегу колдовского озера.</p>
+                </li>
+                <li class="work-item" id="work-tri-sestry">
+                  <div class="work-row">
+                    <span class="work-code">АРХ-03.06</span>
+                    <a class="work-link" href="./works/chekhov-tri-sestry.html">Три сестры</a>
+                    <span class="work-meta">1901 · Драма</span>
+                  </div>
+                  <p class="work-summary">История Ольги, Маши и Ирины Прозоровых в губернском городе, тоскующих по недостижимой Москве и осмысленной жизни.</p>
+                </li>
+                <li class="work-item" id="work-dama-s-sobachkoy">
+                  <div class="work-row">
+                    <span class="work-code">АРХ-03.07</span>
+                    <a class="work-link" href="./works/chekhov-dama-s-sobachkoy.html">Дама с собачкой</a>
+                    <span class="work-meta">1899 · Рассказ</span>
+                  </div>
+                  <p class="work-summary">История курортного знакомства в Ялте, неожиданно переросшего в глубокое, трудное и настоящее чувство.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="silver-age-poetry">
+        <div class="section-header">
+          <p class="section-kicker">Раздел IV · 1895–1925 годы</p>
+          <h2 class="section-title">Поэзия Серебряного века</h2>
+          <p class="section-desc">Эпоха поэтического ренессанса: символизм, акмеизм и трагическая лирика начала XX века, переосмыслившая звук, образ и судьбу поэта.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-blok">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Александр Александрович Блок</h3>
+                  <p class="author-role">Главный лирик русского символизма · <span class="tabular">1880–1921</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Поэт «музыки революции» и таинственных предчувствий, чьё творчество прошло путь от мистической романтики к суровой исторической поэме.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-dvenadcat">
+                  <div class="work-row">
+                    <span class="work-code">АРХ-04.01</span>
+                    <a class="work-link" href="./works/blok-dvenadcat.html">Двенадцать</a>
+                    <span class="work-meta">1918 · Поэма</span>
+                  </div>
+                  <p class="work-summary">Полифоническая поэма о январском Петрограде 1918 года, сквозь вьюгу и смятение которой идут двенадцать красногвардейцев.</p>
+                </li>
+                <li class="work-item" id="work-neznakomka">
+                  <div class="work-row">
+                    <span class="work-code">АРХ-04.02</span>
+                    <a class="work-link" href="./works/blok-neznakomka.html">Незнакомка</a>
+                    <span class="work-meta">1906 · Стихотворение</span>
+                  </div>
+                  <p class="work-summary">Хрестоматийный шедевр русского символизма, где пошлость пригородного ресторана внезапно раздвигается появлением таинственного видения.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-akhmatova">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Анна Андреевна Ахматова</h3>
+                  <p class="author-role">Мастер акмеизма и свидетельница эпохи · <span class="tabular">1889–1966</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Поэт кристальной точности жеста и чувства, сумевшая превратить личную боль и народную память XX века в классическую форму.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-rekviem">
+                  <div class="work-row">
+                    <span class="work-code">АРХ-04.03</span>
+                    <a class="work-link" href="./works/akhmatova-rekviem.html">Реквием</a>
+                    <span class="work-meta">1940 · Поэма-цикл</span>
+                  </div>
+                  <p class="work-summary">Трагический памятник матерям и жёнам, стоявшим в тюремных очередях Ленинграда в годы Большого террора.</p>
+                </li>
+                <li class="work-item" id="work-chetki">
+                  <div class="work-row">
+                    <span class="work-code">АРХ-04.04</span>
+                    <a class="work-link" href="./works/akhmatova-chetki.html">Чётки</a>
+                    <span class="work-meta">1914 · Сборник стихов</span>
+                  </div>
+                  <p class="work-summary">Ранняя книга лирики, принёсшая Ахматовой всероссийскую славу благодаря психологизму и лаконичной предметности деталей.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-tsvetaeva">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Марина Ивановна Цветаева</h3>
+                  <p class="author-role">Поэт предельного ритма и страсти · <span class="tabular">1892–1941</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Одна из самых самобытных фигур русской поэзии XX века, наделившая стих прерывистым дыханием, тире и мощным драматизмом.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-poema-konca">
+                  <div class="work-row">
+                    <span class="work-code">АРХ-04.05</span>
+                    <a class="work-link" href="./works/tsvetaeva-poema-konca.html">Поэма конца</a>
+                    <span class="work-meta">1924 · Поэма</span>
+                  </div>
+                  <p class="work-summary">Пражская поэма о последней прогулке двух любящих людей перед неизбежным расставанием на набережной Влтавы.</p>
+                </li>
+                <li class="work-item" id="work-versty">
+                  <div class="work-row">
+                    <span class="work-code">АРХ-04.06</span>
+                    <a class="work-link" href="./works/tsvetaeva-versty.html">Вёрсты</a>
+                    <span class="work-meta">1921 · Сборник стихов</span>
+                  </div>
+                  <p class="work-summary">Книга московских стихов о родине, разлуке, судьбе и призвании поэта в разломе эпохи.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-esenin">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Сергей Александрович Есенин</h3>
+                  <p class="author-role">Певец русской природы и трагедии деревни · <span class="tabular">1895–1925</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Лирик песенной интонации и образной метафорики, передавший прощание с уходящей крестьянской Русью.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-anna-snegina">
+                  <div class="work-row">
+                    <span class="work-code">АРХ-04.07</span>
+                    <a class="work-link" href="./works/esenin-anna-snegina.html">Анна Снегина</a>
+                    <span class="work-meta">1925 · Лиро-эпическая поэма</span>
+                  </div>
+                  <p class="work-summary">Воспоминание о первой юношеской любви в рязанском селе на фоне революционных перемен 1917 года.</p>
+                </li>
+                <li class="work-item" id="work-cherny-chelovek">
+                  <div class="work-row">
+                    <span class="work-code">АРХ-04.08</span>
+                    <a class="work-link" href="./works/esenin-cherny-chelovek.html">Чёрный человек</a>
+                    <span class="work-meta">1925 · Поэма</span>
+                  </div>
+                  <p class="work-summary">Исповедальная поэма о внутреннем раздвоении, бессоннице и суде над собственной судьбой.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="twentieth-century-prose">
+        <div class="section-header">
+          <p class="section-kicker">Раздел V · 1915–1967 годы</p>
+          <h2 class="section-title">Русская проза XX века и эмиграция</h2>
+          <p class="section-desc">Романы и повести переломного столетия: фантасмагория, судьба интеллигенции, память об утраченной России и интеллектуальная проза.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-bulgakov">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Михаил Афанасьевич Булгаков</h3>
+                  <p class="author-role">Мастер сатирической фантасмагории и философской притчи · <span class="tabular">1891–1940</span></p>
+                </div>
+                <span class="author-count">3 произв.</span>
+              </header>
+              <p class="author-bio">Прозаик и драматург, соединивший московский быт 1920–1930-х годов с библейской драмой, мистикой и вечной защитой творческой свободы.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-master-i-margarita">
+                  <div class="work-row">
+                    <span class="work-code">АРХ-05.01</span>
+                    <a class="work-link" href="./works/bulgakov-master-i-margarita.html">Мастер и Маргарита</a>
+                    <span class="work-meta">1940 · Философский роман</span>
+                  </div>
+                  <p class="work-summary">Роман в романе о визите Воланда и его свиты в Москву, бессмертной любви Маргариты и рукописи Мастера о Понтии Пилате.</p>
+                </li>
+                <li class="work-item" id="work-sobache-serdce">
+                  <div class="work-row">
+                    <span class="work-code">АРХ-05.02</span>
+                    <a class="work-link" href="./works/bulgakov-sobache-serdce.html">Собачье сердце</a>
+                    <span class="work-meta">1925 · Сатирическая повесть</span>
+                  </div>
+                  <p class="work-summary">Блестящая притча об опасном социальном и научном эксперименте профессора Преображенского, превратившего пса Шарика в гражданина Шарикова.</p>
+                </li>
+                <li class="work-item" id="work-belaya-gvardiya">
+                  <div class="work-row">
+                    <span class="work-code">АРХ-05.03</span>
+                    <a class="work-link" href="./works/bulgakov-belaya-gvardiya.html">Белая гвардия</a>
+                    <span class="work-meta">1925 · Роман</span>
+                  </div>
+                  <p class="work-summary">Семейная хроника Турбиных в охваченном Гражданской войной Киеве 1918 года — роман о доме, чести и кремовых шторах среди бури.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-pasternak">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Борис Леонидович Пастернак</h3>
+                  <p class="author-role">Поэт и лауреат Нобелевской премии по литературе · <span class="tabular">1890–1960</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Создатель живой лирики природы и панорамного романа о судьбе врача и поэта Юрия Живаго сквозь революцию и войну.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-doktor-zhivago">
+                  <div class="work-row">
+                    <span class="work-code">АРХ-05.04</span>
+                    <a class="work-link" href="./works/pasternak-doktor-zhivago.html">Доктор Живаго</a>
+                    <span class="work-meta">1955 · Роман</span>
+                  </div>
+                  <p class="work-summary">История жизни, любви к Ларе и стихов Юрия Живаго на фоне крушения старого мира, сопровождаемая циклом «Стихотворения Юрия Живаго».</p>
+                </li>
+                <li class="work-item" id="work-sestra-moya-zhizn">
+                  <div class="work-row">
+                    <span class="work-code">АРХ-05.05</span>
+                    <a class="work-link" href="./works/pasternak-sestra-moya-zhizn.html">Сестра моя — жизнь</a>
+                    <span class="work-meta">1922 · Книга стихов</span>
+                  </div>
+                  <p class="work-summary">Книга, перевернувшая русскую поэтику лета 1917 года свежестью восприятия дождя, грозы, степи и любви.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-bunin">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Иван Алексеевич Бунин</h3>
+                  <p class="author-role">Первый русский лауреат Нобелевской премии по литературе · <span class="tabular">1870–1953</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Мастер живописной прозы и тонкой чувственной памяти, сохранивший образ ушедшей России в изгнании.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-temnye-allei">
+                  <div class="work-row">
+                    <span class="work-code">АРХ-05.06</span>
+                    <a class="work-link" href="./works/bunin-temnye-allei.html">Тёмные аллеи</a>
+                    <span class="work-meta">1943 · Цикл рассказов</span>
+                  </div>
+                  <p class="work-summary">Сорок новелл о любви, памяти, мимолётном счастье и неотвратимости времени, написанных в годы эмиграции.</p>
+                </li>
+                <li class="work-item" id="work-gospodin-iz-san-francisko">
+                  <div class="work-row">
+                    <span class="work-code">АРХ-05.07</span>
+                    <a class="work-link" href="./works/bunin-gospodin-iz-san-francisko.html">Господин из Сан-Франциско</a>
+                    <span class="work-meta">1915 · Рассказ</span>
+                  </div>
+                  <p class="work-summary">Философская притча о тщете богатства и гордыни цивилизации на борту роскошного океанского лайнера «Атлантида».</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-nabokov">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Владимир Владимирович Набоков</h3>
+                  <p class="author-role">Виртуоз стиля и метапрозы · <span class="tabular">1899–1977</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Русско-американский писатель, превративший язык, память и искусство вымысла в главный сюжет своих романов.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-dar">
+                  <div class="work-row">
+                    <span class="work-code">АРХ-05.08</span>
+                    <a class="work-link" href="./works/nabokov-dar.html">Дар</a>
+                    <span class="work-meta">1938 · Роман</span>
+                  </div>
+                  <p class="work-summary">Признание в любви русской литературе: становление молодого поэта Фёдора Годунова-Чердынцева в берлинской эмиграции.</p>
+                </li>
+                <li class="work-item" id="work-zashchita-luzhina">
+                  <div class="work-row">
+                    <span class="work-code">АРХ-05.09</span>
+                    <a class="work-link" href="./works/nabokov-zashchita-luzhina.html">Защита Лужина</a>
+                    <span class="work-meta">1930 · Роман</span>
+                  </div>
+                  <p class="work-summary">История гениального шахматного гроссмейстера, для которого весь реальный мир превращается в сложную комбинацию фигур.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="satire-and-parables">
+        <div class="section-header">
+          <p class="section-kicker">Раздел VI · 1865–1930-е годы</p>
+          <h2 class="section-title">Сатира, сказ и малая проза</h2>
+          <p class="section-desc">Остроумная социальная сатира, искусство устного сказа и виртуозные новеллы, раскрывающие парадоксы национального характера.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-saltykov-shchedrin">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Михаил Евграфович Салтыков-Щедрин</h3>
+                  <p class="author-role">Классик русской обличительной сатиры · <span class="tabular">1826–1889</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Писатель и журналист, создавший гротескную летопись бюрократии и нравов в эзоповой манере.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-istoriya-odnogo-goroda">
+                  <div class="work-row">
+                    <span class="work-code">АРХ-06.01</span>
+                    <a class="work-link" href="./works/shchedrin-istoriya-odnogo-goroda.html">История одного города</a>
+                    <span class="work-meta">1870 · Сатирический роман</span>
+                  </div>
+                  <p class="work-summary">Гротескная хроника города Глупова и его градоначальников — от Органчика до Угрюм-Бурчеева.</p>
+                </li>
+                <li class="work-item" id="work-gospoda-golovlevy">
+                  <div class="work-row">
+                    <span class="work-code">АРХ-06.02</span>
+                    <a class="work-link" href="./works/shchedrin-gospoda-golovlevy.html">Господа Головлёвы</a>
+                    <span class="work-meta">1880 · Социальный роман</span>
+                  </div>
+                  <p class="work-summary">Суровая семейная хроника вырождения помещичьего рода и образ лицемерного пустословия Иудушки Головлёва.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-leskov">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Николай Семёнович Лесков</h3>
+                  <p class="author-role">Мастер русского сказа и праведников · <span class="tabular">1831–1895</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Уникальный стилист, собравший в своей прозе жемчужины живой народной речи, купеческих преданий и удивительных судеб.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-levsha">
+                  <div class="work-row">
+                    <span class="work-code">АРХ-06.03</span>
+                    <a class="work-link" href="./works/leskov-levsha.html">Левша</a>
+                    <span class="work-meta">1881 · Сказ</span>
+                  </div>
+                  <p class="work-summary">Сказ о тульском косом левше и о стальной блохе — гимн народному мастерству и горькая притча о равнодушии к таланту.</p>
+                </li>
+                <li class="work-item" id="work-ocharovanny-strannik">
+                  <div class="work-row">
+                    <span class="work-code">АРХ-06.04</span>
+                    <a class="work-link" href="./works/leskov-ocharovanny-strannik.html">Очарованный странник</a>
+                    <span class="work-meta">1873 · Повесть-сказ</span>
+                  </div>
+                  <p class="work-summary">Дорожная исповедь богатыря Ивана Флягина, прошедшего через плен, степь, испытания и поиск духовного призвания.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+  </main>
+
+  <footer class="container site-footer">
+    <span>Untold Archive — Собрание русской литературы</span>
+    <span>&copy; UntoldArchive.com</span>
+  </footer>
+</body>
+</html>
